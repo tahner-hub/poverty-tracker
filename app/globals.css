@@ -23,3 +23,14 @@
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-feature-settings: "tnum", "ss01";
 }
+
+/* Tooltip entrance animations */
+@keyframes tooltip-in-top {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes tooltip-in-bottom {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
