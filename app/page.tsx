@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import { Info } from 'lucide-react';
 import { buildAllStates } from '@/lib/scoring';
 import TileMap from '@/components/TileMap';
@@ -40,9 +41,17 @@ export default function Dashboard() {
               The Predictive<br />Poverty Tracker
             </h1>
           </div>
-          <div className="text-right font-display italic text-stone-600 text-[13px] max-w-[36ch] leading-snug pb-2">
-            A composite index of eight microeconomic stress signals, scored 0–100 across all fifty
-            states. Higher scores indicate greater pressure toward entrenched poverty.
+          <div className="flex flex-col items-end gap-3 pb-2">
+            <div className="text-right font-display italic text-stone-600 text-[13px] max-w-[36ch] leading-snug">
+              A composite index of eight microeconomic stress signals, scored 0–100 across all fifty
+              states. Higher scores indicate greater pressure toward entrenched poverty.
+            </div>
+            <Link
+              href="/about"
+              className="font-mono text-[11px] uppercase tracking-wider text-stone-500 hover:text-stone-900 border border-stone-300 hover:border-stone-600 rounded-full px-4 py-1.5 transition-colors"
+            >
+              Methodology →
+            </Link>
           </div>
         </header>
 
