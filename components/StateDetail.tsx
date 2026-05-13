@@ -2,6 +2,8 @@
 
 import TrendChart from './TrendChart';
 import ScoreBreakdown from './ScoreBreakdown';
+import Tooltip, { TooltipBody, TooltipLink, TooltipMeta, TooltipTitle } from './Tooltip';
+import { TIERS } from '@/lib/data';
 import type { StateData } from '@/lib/data';
 
 interface Props {
@@ -11,19 +13,37 @@ interface Props {
 export default function StateDetail({ state }: Props) {
   const { tier } = state;
 
+  const tierIndex = TIERS.findIndex((t) => t.name === tier.name);
+  const tierMin = tierIndex === 0 ? 0 : TIERS[tierIndex - 1].max + 1;
+
+  const tierTooltip = (
+    <>
+      <TooltipTitle>{tier.name}</TooltipTitle>
+      <TooltipBody>Score range: {tierMin}–{tier.max}</TooltipBody>
+      <TooltipMeta>{tier.label}</TooltipMeta>
+    </>
+  );
+
+  const criTooltip = (
+    <>
+      <TooltipBody>Weighted average of eight microeconomic stress indicators, scored 0–100.</TooltipBody>
+      <TooltipLink href="/about">Read methodology →</TooltipLink>
+    </>
+  );
+
   return (
     <div>
-      {/* Colored header card */}
+      {/* Colored header card — overflow-hidden moved to texture div so tooltips can escape */}
       <div
-        className="rounded-2xl p-6 mb-5 relative overflow-hidden"
+        className="rounded-2xl p-6 mb-5 relative"
         style={{
           background: `linear-gradient(135deg, ${tier.color}f0 0%, ${tier.color} 100%)`,
           boxShadow: `0 18px 40px -16px ${tier.color}55`,
         }}
       >
-        {/* Dot-grid texture */}
+        {/* Dot-grid texture — overflow-hidden lives here now to clip dots at corners */}
         <div
-          className="absolute inset-0 opacity-10 pointer-events-none"
+          className="absolute inset-0 opacity-10 pointer-events-none rounded-2xl overflow-hidden"
           style={{
             backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.4) 1px, transparent 0)',
             backgroundSize: '16px 16px',
@@ -39,17 +59,24 @@ export default function StateDetail({ state }: Props) {
           </h2>
           <div className="flex items-end gap-5">
             <div>
-              <div className="font-mono text-[10px] uppercase tracking-wider text-white/70">
+              {/* CRI label with ⓘ tooltip trigger */}
+              <div className="font-mono text-[10px] uppercase tracking-wider text-white/70 flex items-center gap-1.5">
                 Composite Risk Index
+                <Tooltip content={criTooltip} side="top" maxWidth={240}>
+                  <span className="cursor-help opacity-60 hover:opacity-100 transition-opacity text-[11px]">ⓘ</span>
+                </Tooltip>
               </div>
               <div className="font-display text-[64px] font-semibold tracking-tight text-white leading-none tabular-nums mt-1">
                 {state.score.toFixed(1)}
               </div>
             </div>
             <div className="pb-2">
-              <div className="inline-block px-2.5 py-1 rounded-md font-mono text-[10px] uppercase tracking-wider text-stone-900 bg-white/95">
-                {tier.name}
-              </div>
+              {/* Tier badge with tooltip */}
+              <Tooltip content={tierTooltip} side="top" maxWidth={220}>
+                <span className="inline-block px-2.5 py-1 rounded-md font-mono text-[10px] uppercase tracking-wider text-stone-900 bg-white/95 cursor-help">
+                  {tier.name}
+                </span>
+              </Tooltip>
               <div className="text-[12px] italic text-white/90 font-display mt-1.5 max-w-[26ch] leading-snug">
                 {tier.label}
               </div>
