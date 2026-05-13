@@ -15,13 +15,16 @@ poverty-tracker/
 ├── app/
 │   ├── layout.tsx          Page title, meta description, font setup
 │   ├── page.tsx            Main dashboard (header, map, state detail, footer)
-│   └── globals.css         Google Fonts import + Tailwind base styles
+│   ├── globals.css         Google Fonts import + Tailwind base styles + tooltip animations
+│   └── about/
+│       └── page.tsx        Methodology page (/about)
 ├── components/
 │   ├── TileMap.tsx         50-state SVG tile map, click/hover interaction
 │   ├── NationalSummary.tsx 4-column summary card (avg score, tier counts, top/bottom 3)
-│   ├── StateDetail.tsx     Colored state header card with score + tier badge
+│   ├── StateDetail.tsx     Colored state header card — CRI score, tier badge, both with tooltips
 │   ├── TrendChart.tsx      12-year history + 3/5/10-year forecast, horizon toggles
-│   ├── ScoreBreakdown.tsx  8-indicator score composition table with weighted contributions
+│   ├── ScoreBreakdown.tsx  8-indicator score composition table with weighted contributions + tooltips
+│   ├── Tooltip.tsx         Reusable floating tooltip component + TooltipTitle/Body/Meta/Link
 │   └── Legend.tsx          5-tier color legend
 ├── lib/
 │   ├── data.ts             All state data, positions, tier definitions, TypeScript types
@@ -37,21 +40,55 @@ All data is currently **simulated** — the CRI formula and weights are real (fr
 
 ---
 
-## Tabled for Phase 1.5 (Next Session)
+## What's Done — Phase 1.5 ✅
 
-### (a) About / Methodology Page
-A public-facing page (`/about`) explaining the project for non-technical visitors:
+### (a) Methodology Page (`/about`)
+A full public-facing page explaining the project for non-technical visitors:
 - What the Composite Risk Index is and why it exists
-- The four layers (Early Warning, Community Drain, Mobility Barriers, Analytics Engine)
-- Each of the 8 indicators: what it measures, its weight, and why it was chosen
-- The 5 risk tiers and what each one means operationally
-- Data sources and limitations (currently simulated; what live sources will replace them)
-- Brief note on the forecasting approach (linear now → SARIMA/Bayesian in Phase 4)
+- The four layers (Early Warning, Community Drain, Mobility Barriers, Structural)
+- Each of the 8 indicators: full name, definition, weight, signal type, and layer — all sourced from the workbook
+- Worked example table (how indicator values combine into a CRI score)
+- The 5 risk tiers with score ranges and operational guidance
+- Data sources and limitations — split into current (simulated) and future (live API) tables
+- Top-of-page amber notice linking to the data disclaimer section
+- Linked from the dashboard header as "Methodology →"
 
-### (b) Hover Tooltips Throughout the Dashboard
-- **State tiles:** hovering a tile shows a small floating card with the state name, CRI score, tier badge, and a 3-line mini-breakdown of the top contributing indicators
-- **Indicator rows (score table):** hovering an indicator ID (H1, E1, etc.) shows the full definition, data source, signal type (Leading/Concurrent/Structural), and update frequency
-- **Tier badges:** hovering the tier badge (e.g., "HIGH RISK") shows the score range, the operational meaning, and the recommended policy response from the framework
+### (b) Reusable Tooltip Component (`components/Tooltip.tsx`)
+A lightweight hover tooltip built with React state and CSS positioning:
+- Dark warm card (`#1e1b18`) with fade+slide entrance animation (130ms ease-out)
+- `side="top"` (default) or `side="bottom"`, with matching directional arrow
+- Named sub-components: `TooltipTitle`, `TooltipBody`, `TooltipMeta`, `TooltipLink`
+- Mouse-only for now — keyboard and touch support deferred (see below)
+
+### (c) Indicator Tooltips (`ScoreBreakdown.tsx`)
+Hovering any indicator row (id badge + label) shows:
+- Full indicator name and one-sentence definition sourced from the workbook
+- Signal type, layer, and weight in monospace caps at the bottom
+- All 8 indicators wired: H1, E1, F2, F4, D1, N2, L3, M2
+
+### (d) Tier Badge + CRI Tooltips (`StateDetail.tsx`)
+- **Tier badge** (e.g., "MODERATE RISK"): shows tier name, score range, and operational label
+- **ⓘ icon** next to "Composite Risk Index": one-line definition + "Read methodology →" link to `/about`
+
+---
+
+## Deferred — Tooltip Accessibility Pass
+The `Tooltip` component currently responds to mouse hover only. A future pass should add:
+- **Keyboard**: show on focus (Tab/Shift+Tab to reach trigger), dismiss on Escape
+- **Touch/mobile**: show on tap, dismiss on tap-outside
+
+Intentionally deferred to a later accessibility phase. Filed per user request after Task 2 review.
+
+---
+
+## Future Ideas
+
+### Multi-State Compare Mode
+**What:** Pin 2–4 states to view their CRI score breakdowns side by side — same 8 indicators, each state in its own column, color-coded by tier.
+
+**Why it belongs here:** The original instinct behind the tile map tooltip was "I want to quickly compare states." A tooltip can't deliver that — a real compare view can. The tile map's existing color + click interaction already handles single-state exploration well; the gap is cross-state analysis.
+
+**Scope:** Phase 2+ build. Requires a persistent "pinned states" list (local state or URL params), a new layout panel or page, and column-based adaptation of the ScoreBreakdown table. Not a tooltip.
 
 ---
 
