@@ -286,9 +286,9 @@ export default function AboutPage() {
           <SectionLabel number="02" title="Why Traditional Poverty Measurement Falls Short" />
           <div className="space-y-4 text-[15px] text-stone-700 leading-relaxed">
             <p>
-              The Official Poverty Measure (OPM) — the federal government's primary poverty
-              statistic since 1963 — counts only gross pre-tax cash income and ignores the
-              government's own anti-poverty programs: SNAP, the Earned Income Tax Credit,
+              The Official Poverty Measure (OPM) — the primary federal poverty
+              statistic since 1963 — counts only gross pre-tax cash income and ignores
+              federal anti-poverty programs: SNAP, the Earned Income Tax Credit,
               housing vouchers, and Medicaid all go unrecognized. It uses thresholds derived
               from a 1963 food-cost survey, adjusted only for general inflation.
             </p>
@@ -396,8 +396,9 @@ export default function AboutPage() {
               added together.
             </p>
             <p>
-              Weights reflect each indicator's{' '}
-              <strong className="text-stone-900 font-semibold">predictive power and lead time</strong>.
+              Weights reflect the{' '}
+              <strong className="text-stone-900 font-semibold">predictive power and lead time</strong>{' '}
+              of each indicator.
               Leading indicators (those that signal trouble furthest in advance) receive
               higher weights. The two Early Warning indicators together account for 35% of
               the total score — the largest share of any layer.
@@ -423,8 +424,8 @@ export default function AboutPage() {
             </div>
             <div className="mt-5 pt-5 border-t border-stone-200 text-[13px] text-stone-600 leading-relaxed">
               <strong className="text-stone-800">Plain-English version:</strong> For each of
-              the eight indicators, take the current value, multiply it by that indicator's
-              weight, and add all eight results together. The total is the CRI score.
+              the eight indicators, take the current value, multiply it by the weight for
+              that indicator, and add all eight results together. The total is the CRI score.
             </div>
           </div>
 
@@ -697,8 +698,8 @@ export default function AboutPage() {
 
           <div className="space-y-4 text-[15px] text-stone-700 leading-relaxed">
             <p>
-              The simulated values are derived as follows: each state's ACS 2023 poverty rate
-              is used to position it along a normalized scale, and indicator values are
+              The simulated values are derived as follows: the ACS 2023 poverty rate for each
+              state is used to position it along a normalized scale, and indicator values are
               generated around that baseline using a seeded random function — ensuring the
               dashboard renders consistently and that higher-poverty states score higher on
               the index. The CRI formula, weights, and tier boundaries are real and unchanged
